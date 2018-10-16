@@ -12,4 +12,4 @@ Start: `pyort --start`
 Custom: `pyort -s --kind tcp6`
 
 # Configuration
-`Config.ini` and database files exsists in ure `$HOME/.config/pyort`
+`Config.ini` and database files exsists in the direcotry `$HOME/.config/pyort`

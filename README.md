@@ -1,5 +1,5 @@
 # Pyort
-Command line tool for monetoring all foreign network connections
+Command line tool for monitoring all foreign network connections
 
 # Installation
 `pip install git+https://github.com/Gananath/Pyort.git`

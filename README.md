@@ -6,7 +6,9 @@ Command line tool for monetoring all network connections
 
 # Usage
 Help: `pyort -h`
+
 Start: `pyort --start`
+
 Custom: `pyort -s --kind tcp6`
 
 # Configuration

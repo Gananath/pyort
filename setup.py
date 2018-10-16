@@ -20,7 +20,7 @@ setup(
     },
     # The license can be anything you like
     license='MIT',
-    description='Command line tool for monetoring all network connections',
+    description='Command line tool for monitoring all network connections',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
 )

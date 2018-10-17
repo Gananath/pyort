@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
     name='pyort',
-    url='https://github.com/Gananth/Pyort',
+    url='https://github.com/Gananath/Pyort',
     author='Gananath R',
     author_email='nomail@nomail.com',
     # Needed to actually package something
@@ -20,7 +20,7 @@ setup(
     },
     # The license can be anything you like
     license='MIT',
-    description='Command line tool for monetoring all network connections',
+    description='Command line tool for monitoring all network connections',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
 )

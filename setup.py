@@ -11,7 +11,7 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','pysqlite'],
     # *strongly* suggested for sharing
-    version='0.1',
+    version='0.1.1',
     
     entry_points = {
         'console_scripts': [
@@ -20,7 +20,7 @@ setup(
     },
     # The license can be anything you like
     license='MIT',
-    description='Command line tool for monitoring all network connections',
+    description='Command line tool for monetoring all network connections',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
 )

@@ -1,7 +1,7 @@
 # Pyort
 Command line tool for monitoring all foreign network connections
 
-# Installation
+# Installation (python 2.7)
 `pip install git+https://github.com/Gananath/Pyort.git`
 
 # Usage

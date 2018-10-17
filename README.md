@@ -1,4 +1,4 @@
-# Pyort
+# pyort
 Command line tool for monitoring all foreign network connections
 
 # Installation (python 2.7)

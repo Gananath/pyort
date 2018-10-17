@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
-    name='Pyort',
+    name='pyort',
     url='https://github.com/Gananth/Pyort',
     author='Gananath R',
     author_email='nomail@nomail.com',

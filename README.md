@@ -4,7 +4,7 @@ Command line tool for monitoring all foreign network connections
 # Installation (python 2.7)
 `pip install pyort` 
    or 
-`pip install git+https://github.com/Gananath/Pyort.git`
+`pip install git+https://github.com/Gananath/pyort.git`
 
 # Usage
 Help: `pyort -h`

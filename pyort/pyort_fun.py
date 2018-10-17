@@ -4,7 +4,16 @@ import psutil
 import sqlite3
 import ipaddress
 import ConfigParser
+try:
+    import httpbl
+except:
+    pass
 
+
+def project_honey_pot(ip,key):
+    bl = httpbl.HttpBL(key)
+    response = bl.query(ip)
+    return response['threat_score'],response['days_since_last_activity']
 
 def validIP(address):
     parts = address.split(".")
@@ -22,9 +31,10 @@ def extract_ip(x,ip=True):
         elif validIP(x[0])==True and ip==False:
             return x[1]
         else:
-            return x
+            return None
     except:
         return None
+
 
 
 
@@ -45,6 +55,8 @@ def config_para(directory,configfile_name):
         Config.set('pyort', 'db_name','pyort.db')
         Config.set('pyort', 'interval',10)
         Config.set('pyort', 'kind',"all")
+        Config.set('pyort', 'project_honey_pot_key','')
+        Config.set('pyort', 'threat_update_count',1000)
         Config.write(cfgfile)
         cfgfile.close()    
     
@@ -53,7 +65,9 @@ def config_para(directory,configfile_name):
     db_name= Config.get('pyort','db_name')
     slp= Config.get('pyort','interval')
     kd= Config.get('pyort','kind')
-    return db_path,db_name,slp,kd
+    hp_key=Config.get('pyort', 'project_honey_pot_key')
+    threat_update=Config.get('pyort', 'threat_update_count')
+    return db_path,db_name,slp,kd,hp_key,threat_update
 
 def sqlite_conn(db_path,db_name):
     try:
@@ -71,7 +85,9 @@ def sqlite_conn(db_path,db_name):
                          remote_port TEXT NOT NULL,
                          status TEXT NOT NULL,
                          pid TEXT NOT NULL,
-                         today_count INT NOT NULL      
+                         today_count INT NOT NULL,
+                         threat_score TEXT NOT NULL,
+                         last_active TEXT NOT NULL      
                         
                          );''')
         print "Database connected"
@@ -88,6 +104,6 @@ def record_exists(db_conn,ip):
     cursor=db_conn.execute(sql_query,(ip,))
     exist=cursor.fetchone()
     if exist is None:
-        return False,'None'
+        return False,'None','None'
     else:
-        return True,exist[-1]
+        return True,exist[-3],exist[-2]

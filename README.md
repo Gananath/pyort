@@ -16,7 +16,7 @@ Custom: `pyort -s --kind tcp6`
 Silent: `pyort -s -x`
 
 # Configuration
-`config.ini` and database files exsists in the direcotry `$HOME/.config/pyort`. 
+`config.ini` and database files exists in the directory `$HOME/.config/pyort`. 
 ```
 db_path = database path
 db_name = database name
@@ -26,6 +26,6 @@ project_honey_pot_key = projecthoneypot.org's api key
 threat_update_count = interval for updating the threat score from projecthoneypot.org
 ```
 # Optional
-If wanted you can also get [project honey pot's](https://www.projecthoneypot.org/) threat score for foregin ip's but needs porject honey pot's api and `pip install httpbl`. Add the api key to `config.ini` without quotes.
+If wanted you can also get [project honey pot's](https://www.projecthoneypot.org/) threat score for foreign ip's but needs project honey pot's api and `pip install httpbl`. Add the api key to `config.ini` without quotes.
 
 

@@ -63,9 +63,9 @@ def pyort_start(args):
                          today_count=today_count+1,threat_score=?,last_active=? where remote_ip=?"""
                     db_conn.execute(sql_query,(str(threat_score),str(last_active),remote_ip))
                 if args.silent!=True:
-                    print("Local= "+str(local_ip)+":"+str(local_port)+\
-                          "  Foreign= "+str(remote_ip)+":"+str(remote_port)+\
-                          " PID= "+str(p_id)+" Count:"+str(t_count)+" Threat:"+str(t_score))
+                    print("Local= {:<15}:{:<6} Foreign= {:<15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<7} "\
+                    .format(str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
+                    str(t_score),str(t_count)))
 
 
             db_conn.commit()

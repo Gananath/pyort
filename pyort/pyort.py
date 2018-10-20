@@ -1,8 +1,8 @@
 import sys
 import argparse
-#sys.path.append("../pyort/pyort/")
-#from pyort_fun import *
-from .pyort_fun import *
+sys.path.append("../pyort/pyort/")
+from pyort_fun import *
+#from .pyort_fun import *
 
 def main():
     parser = argparse.ArgumentParser()
@@ -21,15 +21,15 @@ def pyort_start(args):
     
     configfile_name = "config.ini"
     directory=os.path.expanduser("~")+"/.config/pyort/" 
-    if args.kind != None: #kind argument from command line
-        kd=args.kind
-        
+    
+   
     #fetch values from config file
     db_path,db_name,time_interval,kd,hp_key,threat_update=config_para(directory,configfile_name)
     
     #connecting to database
     db_conn=sqlite_conn(db_path,db_name)
-
+    if args.kind != None: #kind argument from command line
+        kd=args.kind
 
     #validating input values and fetches values from database
     if args.database == False and args.start ==False:
@@ -63,7 +63,7 @@ def pyort_start(args):
         print("\nMonitoring "+kd+" connections\n")         
         while True:
             count=0
-            conn=psutil.net_connections(kind=kd)
+            conn=psutil.net_connections(kind=kd)            
             for c in conn:
                 fd= c[0]
                 family_code=c[1]

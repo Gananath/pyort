@@ -1,28 +1,66 @@
 import sys
-#sys.path.append("../pyort/pyort/")
 import argparse
+#sys.path.append("../pyort/pyort/")
+#from pyort_fun import *
 from .pyort_fun import *
 
-def main():    
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s','--start',action='store_true', help="Start monitoring of foregin IP's")
     parser.add_argument('-k','--kind',type=str,help="Similar to [kind] parameter in psutil.net_connections")
     parser.add_argument('-x','--silent',action='store_true',help="Silent mode, will not print any output")
+    #for viewing database
+    parser.add_argument('-d','--database',action='store_true',help="Fetch recent rows from database")
+    parser.add_argument('-o','--order',nargs='?',type=str,default='COUNT',help="Fetch by IP or COUNT")
+    parser.add_argument('-c','--constant',type=str,help="Add IP details here")
+    parser.add_argument('-l','--limit',nargs='?',type=int,default=10,help="Fetch rows from database")
     args = parser.parse_args()
     sys.stdout.write(str(pyort_start(args)))
     
 def pyort_start(args):
-       
-    if args.start==True:
-        configfile_name = "config.ini"
-        directory=os.path.expanduser("~")+"/.config/pyort/" 
+    
+    configfile_name = "config.ini"
+    directory=os.path.expanduser("~")+"/.config/pyort/" 
+    if args.kind != None: #kind argument from command line
+        kd=args.kind
         
-        #fetch values from config file
-        db_path,db_name,time_interval,kd,hp_key,threat_update=config_para(directory,configfile_name)
-        if args.kind != None: #kind argument from command line
-            kd=args.kind
-        print("\nMonitoring "+kd+" connections\n") 
-        db_conn=sqlite_conn(db_path,db_name)
+    #fetch values from config file
+    db_path,db_name,time_interval,kd,hp_key,threat_update=config_para(directory,configfile_name)
+    
+    #connecting to database
+    db_conn=sqlite_conn(db_path,db_name)
+
+
+    #validating input values and fetches values from database
+    if args.database == False and args.start ==False:
+        print ("Warning: please specify -d or -s")        
+    elif args.database == True and args.start ==False:
+           
+        if args.order==None:
+            args.order="COUNT"
+        if args.limit ==None:
+            limit=10
+        else:
+            limit=args.limit
+        if args.order=="IP":
+            if args.constant==None:
+                print ("Please provide the IP in -c")
+            else:
+                print("\nRecent records selected according to the foregin IP\n")
+                _,records=record_exists(db_conn,ip=args.constant,job="IP",limit=limit)
+                print_database(records)
+        elif args.order=="COUNT":
+            print("\nRecent records selected according to the count of incidence\n")
+            _,records=record_exists(db_conn,job="COUNT",limit=limit)
+            print_database(records)
+            
+    elif args.database == True and args.start == True:
+        print "Warning: -d and -s parameters are not allowed together"
+         
+    #starts monitioring
+    if args.start==True and args.database == False:       
+        
+        print("\nMonitoring "+kd+" connections\n")         
         while True:
             count=0
             conn=psutil.net_connections(kind=kd)
@@ -35,13 +73,13 @@ def pyort_start(args):
                 remote_ip=extract_ip(c[4])
                 remote_port=extract_ip(c[4],False)
                 status_code=c[5]
-                p_id=c[6]
+                p_id=c[6]                
                 #if not an ip or a private ip then escape the loop
                 if remote_ip==None or ipaddress.ip_address(unicode(remote_ip)).is_private==True:
                     continue
-                                        
+                           
                 #verfiy if the ip exists in the database
-                is_record_exists, t_count,t_score=record_exists(db_conn,remote_ip)
+                is_record_exists, t_count=record_exists(db_conn,remote_ip)
         
                 #updating project_honey_pot threat_score
                 if hp_key!='' and int(count)%int(threat_update)==0:
@@ -63,9 +101,13 @@ def pyort_start(args):
                          today_count=today_count+1,threat_score=?,last_active=? where remote_ip=?"""
                     db_conn.execute(sql_query,(str(threat_score),str(last_active),remote_ip))
                 if args.silent!=True:
-                    print("Local= {:<15}:{:<6} Foreign= {:<15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<7} "\
-                    .format(str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
-                    str(t_score),str(t_count)))
+                    #for preventing error assaingig t_count a zero array list
+                    if is_record_exists==False:                        
+                        t_count=[0,0,0,0]
+                    
+                    print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
+                    .format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
+                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))
 
 
             db_conn.commit()
@@ -76,3 +118,4 @@ def pyort_start(args):
 
 if __name__=='__main__':     
     main()
+

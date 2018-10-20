@@ -32,7 +32,7 @@ def extract_ip(x,ip=True):
             return x[1]
         else:
             return None
-    except:
+    except:        
         return None
 
 
@@ -96,14 +96,44 @@ def sqlite_conn(db_path,db_name):
         print e
         print "Error"
         
+    
+
+def print_database(records):
+    for i in records:
+        local_ip=i[6]
+        local_port=i[7]
+        remote_ip=i[8]
+        remote_port=i[9]
+        p_id=i[11]
+        print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
+                .format(str(i[2]),str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
+                str(i[-2]),str(i[-3])))
     return None
 
-
-def record_exists(db_conn,ip):
-    sql_query="SELECT * FROM pyort WHERE remote_ip=? ORDER BY id DESC  LIMIT 1 "
-    cursor=db_conn.execute(sql_query,(ip,))
-    exist=cursor.fetchone()
-    if exist is None:
-        return False,'None','None'
+def record_exists(db_conn,ip=None,job=None, limit=1):
+    if ip != None and job ==None:
+        sql_query="SELECT * FROM pyort WHERE remote_ip=? ORDER BY id DESC  LIMIT ? "
+        cursor=db_conn.execute(sql_query,(ip,limit))
+        exist=cursor.fetchone()
+        if exist is None:
+            #return False,'None','None'
+            return False,None
+        else:
+            #return True,exist[-3],exist[-2]
+            return True, exist
+    elif job !=None:
+        if job == "COUNT":
+            sql_query="SELECT * FROM pyort WHERE DATE(first_time)=DATE('now') OR DATE(last_time)=DATE('now')  ORDER BY today_count DESC  LIMIT ? "
+            cursor=db_conn.execute(sql_query,(limit,))
+        elif job == "IP":
+            sql_query="SELECT * FROM pyort WHERE remote_ip=? ORDER BY id DESC  LIMIT ? "
+            cursor=db_conn.execute(sql_query,(ip,limit))
+        exist=cursor.fetchall()
+        if exist is None:
+            #return False,'None','None'
+            return False,None
+        else:
+            #return True,exist[-3],exist[-2]
+            return True, exist
     else:
-        return True,exist[-3],exist[-2]
+        False, None    

@@ -19,6 +19,7 @@ Silent: `pyort -s -x`
 
 ###### Database
 Incidence = `pyort -d -l 10`
+
 Ip = `pyort -d -o IP -c xxx.xxx.xxx.xxx` 
 
 ## Configuration

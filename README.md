@@ -18,7 +18,7 @@ Custom: `pyort -s --kind tcp6`
 Silent: `pyort -s -x`
 
 ###### Database
-Incidence = `pyort -d -l 10`
+Incidence = `pyort -d -l 100`
 
 Ip = `pyort -d -o IP -c xxx.xxx.xxx.xxx` 
 

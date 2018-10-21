@@ -11,11 +11,11 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','pysqlite'],
     # *strongly* suggested for sharing
-    version='0.1.3',
+    version='0.1.4',
     
     entry_points = {
         'console_scripts': [
-            'pyort=pyort.__main__:main',
+            'pyort=pyort.pyort:main',
         ],
     },
     # The license can be anything you like

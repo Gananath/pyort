@@ -1,8 +1,9 @@
 import sys
 import argparse
-sys.path.append("../pyort/pyort/")
-from pyort_fun import *
-#from .pyort_fun import *
+#sys.path.append("../pyort/pyort/")
+#from pyort_fun import *
+from .pyort_fun import *
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -35,7 +36,7 @@ def pyort_start(args):
     if args.database == False and args.start ==False:
         print ("Warning: please specify -d or -s")        
     elif args.database == True and args.start ==False:
-           
+        
         if args.order==None:
             args.order="COUNT"
         if args.limit ==None:

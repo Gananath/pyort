@@ -12,8 +12,8 @@ def main():
     parser.add_argument('-x','--silent',action='store_true',help="Silent mode, will not print any output")
     #for viewing database
     parser.add_argument('-d','--database',action='store_true',help="Fetch recent rows from database")
-    parser.add_argument('-o','--order',nargs='?',type=str,default='COUNT',help="Fetch by IP or COUNT")
-    parser.add_argument('-c','--constant',type=str,help="Add IP details here")
+    parser.add_argument('-o','--order',nargs='?',type=str,default='count',help="Fetch by ip or COUNT")
+    parser.add_argument('-c','--constant',type=str,help="Add ip details here")
     parser.add_argument('-l','--limit',nargs='?',type=int,default=10,help="Fetch rows from database")
     args = parser.parse_args()
     sys.stdout.write(str(pyort_start(args)))
@@ -38,21 +38,21 @@ def pyort_start(args):
     elif args.database == True and args.start ==False:
         
         if args.order==None:
-            args.order="COUNT"
+            args.order="count"
         if args.limit ==None:
             limit=10
         else:
             limit=args.limit
-        if args.order=="IP":
+        if args.order=="ip":
             if args.constant==None:
-                print ("Please provide the IP in -c")
+                print ("Please provide the [ip] in -c")
             else:
                 print("\nRecent records selected according to the foregin IP\n")
-                _,records=record_exists(db_conn,ip=args.constant,job="IP",limit=limit)
+                _,records=record_exists(db_conn,ip=args.constant,job="ip",limit=limit)
                 print_database(records)
-        elif args.order=="COUNT":
+        elif args.order=="count":
             print("\nRecent records selected according to the count of incidence\n")
-            _,records=record_exists(db_conn,job="COUNT",limit=limit)
+            _,records=record_exists(db_conn,job="count",limit=limit)
             print_database(records)
             
     elif args.database == True and args.start == True:

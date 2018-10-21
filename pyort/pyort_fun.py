@@ -122,10 +122,10 @@ def record_exists(db_conn,ip=None,job=None, limit=1):
             #return True,exist[-3],exist[-2]
             return True, exist
     elif job !=None:
-        if job == "COUNT":
+        if job == "count":
             sql_query="SELECT * FROM pyort WHERE DATE(first_time)=DATE('now') OR DATE(last_time)=DATE('now')  ORDER BY today_count DESC  LIMIT ? "
             cursor=db_conn.execute(sql_query,(limit,))
-        elif job == "IP":
+        elif job == "ip":
             sql_query="SELECT * FROM pyort WHERE remote_ip=? ORDER BY id DESC  LIMIT ? "
             cursor=db_conn.execute(sql_query,(ip,limit))
         exist=cursor.fetchall()

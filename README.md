@@ -20,7 +20,7 @@ Silent: `pyort -s -x`
 ###### Database viewing
 Incidence = `pyort -d -l 100`
 
-Ip = `pyort -d -o IP -c xxx.xxx.xxx.xxx` 
+Ip = `pyort -d -o ip -c xxx.xxx.xxx.xxx` 
 
 ## Configuration
 `config.ini` and database files exists in the directory `$HOME/.config/pyort`. 

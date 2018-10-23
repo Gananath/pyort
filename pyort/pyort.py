@@ -114,7 +114,11 @@ def pyort_start(args):
                     sql_query="""UPDATE pyort SET last_time=DATETIME('now'),
                          today_count=today_count+1,threat_score=?,last_active=? where remote_ip=?"""
                     db_conn.execute(sql_query,(str(threat_score),str(last_active),remote_ip))
-                if args.silent!=True:                      
+                if args.silent!=True: 
+                    '''
+                    if is_record_exists==False:
+                        #suppressing nonetype error
+                        tcount=[0]*10    '''                 
                     print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
                     .format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
                      str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))

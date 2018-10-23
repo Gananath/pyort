@@ -39,6 +39,7 @@ def extract_ip(x,ip=True):
 
 
 def config_para(directory,configfile_name):
+    VERSION="0.1.6"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -57,17 +58,27 @@ def config_para(directory,configfile_name):
         Config.set('pyort', 'kind',"all")
         Config.set('pyort', 'project_honey_pot_key','')
         Config.set('pyort', 'threat_update_count',1000)
+        Config.set('pyort', 'version',VERSION)
         Config.write(cfgfile)
         cfgfile.close()    
+    try:
+        Config.read(directory+configfile_name)
+        db_path= Config.get('pyort','db_path')
+        db_name= Config.get('pyort','db_name')
+        slp= Config.get('pyort','interval')
+        kd= Config.get('pyort','kind')
+        hp_key=Config.get('pyort', 'project_honey_pot_key')
+        threat_update=Config.get('pyort', 'threat_update_count')
+        version=Config.get('pyort', 'version')        
+    except Exception as e:
+        print e.__doc__
+        print e.message
+        print("Got some error in [config.ini], Deleting old one and creating new [config.ini].")        
+        os.remove(directory+configfile_name)
+        config_para(directory,configfile_name)  
     
-    Config.read(directory+configfile_name)
-    db_path= Config.get('pyort','db_path')
-    db_name= Config.get('pyort','db_name')
-    slp= Config.get('pyort','interval')
-    kd= Config.get('pyort','kind')
-    hp_key=Config.get('pyort', 'project_honey_pot_key')
-    threat_update=Config.get('pyort', 'threat_update_count')
-    return db_path,db_name,slp,kd,hp_key,threat_update
+    return db_path,db_name,slp,kd,hp_key,threat_update,version
+    
 
 def sqlite_conn(db_path,db_name):
     try:
@@ -115,11 +126,9 @@ def record_exists(db_conn,ip=None,job=None, limit=1):
         sql_query="SELECT * FROM pyort WHERE remote_ip=? ORDER BY id DESC  LIMIT ? "
         cursor=db_conn.execute(sql_query,(ip,limit))
         exist=cursor.fetchone()
-        if exist is None:
-            #return False,'None','None'
-            return False,None
-        else:
-            #return True,exist[-3],exist[-2]
+        if exist is None:            
+            return False, [0]*10 #return a zero array
+        else:            
             return True, exist
     elif job !=None:
         if job == "count":
@@ -129,11 +138,9 @@ def record_exists(db_conn,ip=None,job=None, limit=1):
             sql_query="SELECT * FROM pyort WHERE remote_ip=? ORDER BY id DESC  LIMIT ? "
             cursor=db_conn.execute(sql_query,(ip,limit))
         exist=cursor.fetchall()
-        if exist is None:
-            #return False,'None','None'
-            return False,None
-        else:
-            #return True,exist[-3],exist[-2]
+        if exist is None:            
+            return False,[0]*10 #return a zero array
+        else:            
             return True, exist
     else:
-        False, None    
+        False, [0]*10 #return a zero array   

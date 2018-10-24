@@ -122,7 +122,7 @@ def sqlite_conn(db_path,db_name):
     
 
 def print_database(records):
-    template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<4}|{:<}"
+    template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<}"
     print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process") 
     for i in records:
         local_ip=i[6]

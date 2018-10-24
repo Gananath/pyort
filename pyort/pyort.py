@@ -76,7 +76,7 @@ def pyort_start(args):
         print("\nMonitoring "+kd+" connections.\n")  
         #Loop till exit
         #Print format
-        template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<4}|{:<}"
+        template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<}"
         print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process") 
         while True:
             count=0

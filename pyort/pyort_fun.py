@@ -9,7 +9,13 @@ try:
 except:
     pass
 
-
+def get_process_name(pid):
+    try:
+        p_name=psutil.Process(pid).name()
+        return p_name
+    except:
+        return 'None'
+        return 'None'
 def project_honey_pot(ip,key):
     bl = httpbl.HttpBL(key)
     response = bl.query(ip)
@@ -39,7 +45,7 @@ def extract_ip(x,ip=True):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.6"    
+    VERSION="0.1.7"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -60,9 +66,13 @@ def config_para(directory,configfile_name):
         Config.set('pyort', 'threat_update_count',1000)
         Config.set('pyort', 'version',VERSION)
         Config.write(cfgfile)
-        cfgfile.close()    
+        cfgfile.close()
+  
     try:
         Config.read(directory+configfile_name)
+        Config.set('pyort', 'version',VERSION)
+        with open(directory+configfile_name, 'wb') as configfile:
+            Config.write(configfile)
         db_path= Config.get('pyort','db_path')
         db_name= Config.get('pyort','db_name')
         slp= Config.get('pyort','interval')
@@ -96,9 +106,11 @@ def sqlite_conn(db_path,db_name):
                          remote_port TEXT NOT NULL,
                          status TEXT NOT NULL,
                          pid TEXT NOT NULL,
+                         process_name TEXT NOT NULL,
                          today_count INT NOT NULL,
                          threat_score TEXT NOT NULL,
-                         last_active TEXT NOT NULL      
+                         last_active TEXT NOT NULL   
+                           
                         
                          );''')
         print "Database connected"
@@ -110,15 +122,21 @@ def sqlite_conn(db_path,db_name):
     
 
 def print_database(records):
+    template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<4}|{:<}"
+    print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process") 
     for i in records:
         local_ip=i[6]
         local_port=i[7]
         remote_ip=i[8]
         remote_port=i[9]
         p_id=i[11]
+        p_name=i[12]
+        '''
         print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
                 .format(str(i[2]),str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
-                str(i[-2]),str(i[-3])))
+                str(i[-2]),str(i[-3])))'''
+        print template.format(str(i[2]),str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
+                str(i[-2]),str(i[-3]),str(p_name))
     return None
 
 def record_exists(db_conn,ip=None,job=None, limit=1):

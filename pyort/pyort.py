@@ -1,8 +1,8 @@
 import sys
 import argparse
-#sys.path.append("../pyort/pyort/")
-#from pyort_fun import *
-from .pyort_fun import *
+sys.path.append("../pyort/pyort/")
+from pyort_fun import *
+#from .pyort_fun import *
 
 
 
@@ -74,10 +74,14 @@ def pyort_start(args):
     #starts monitioring
     if args.start==True and args.database == False:        
         print("\nMonitoring "+kd+" connections.\n")  
-        #Loop till exit      
+        #Loop till exit
+        #Print format
+        template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<4}|{:<}"
+        print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process") 
         while True:
             count=0
-            conn=psutil.net_connections(kind=kd)            
+            conn=psutil.net_connections(kind=kd)
+                    
             for c in conn:
                 fd= c[0]
                 family_code=c[1]
@@ -87,14 +91,15 @@ def pyort_start(args):
                 remote_ip=extract_ip(c[4])
                 remote_port=extract_ip(c[4],False)
                 status_code=c[5]
-                p_id=c[6]                
+                p_id=c[6]  
+                p_name= get_process_name(p_id)            
                 #if not an ip or a private ip then escape the loop
                 if remote_ip==None or ipaddress.ip_address(unicode(remote_ip)).is_private==True:
                     continue
                            
                 #verfiy if the ip exists in the database
                 is_record_exists, t_count=record_exists(db_conn,remote_ip)
-        
+                
                 #updating project_honey_pot threat_score
                 if hp_key!='' and int(count)%int(threat_update)==0:
                     threat_score,last_active=project_honey_pot(remote_ip,hp_key)
@@ -104,25 +109,27 @@ def pyort_start(args):
                 if is_record_exists==False:                    
                     sql_query="""INSERT INTO pyort(fd,family,
                                        conn_type,local_ip,local_port,remote_ip,remote_port,
-                                       status,pid,today_count,threat_score,last_active)
-                                       VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"""
+                                       status,pid,process_name,today_count,threat_score,last_active)
+                                       VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
                     db_conn.execute(sql_query,(fd, family_code, type_code,str(local_ip),str(local_port),\
                                                str(remote_ip),str(remote_port),status_code,str(p_id),\
-                                                count,str(threat_score),str(last_active)))
+                                                str(p_name),count,str(threat_score),str(last_active)))
                 else:            
                     sql_query="""UPDATE pyort SET last_time=DATETIME('now'),
-                         today_count=today_count+1,threat_score=?,last_active=? where remote_ip=?"""
-                    db_conn.execute(sql_query,(str(threat_score),str(last_active),remote_ip))
+                         today_count=today_count+1,threat_score=?,last_active=?,pid=?,process_name=? where remote_ip=?"""
+                    db_conn.execute(sql_query,(str(threat_score),str(last_active),str(p_id),str(p_name),remote_ip))
                 if args.silent!=True: 
                     '''
                     if is_record_exists==False:
                         #suppressing nonetype error
-                        tcount=[0]*10    '''                 
+                        tcount=[0]*10                 
                     print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
                     .format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
-                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))
-
+                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))                 
+                     '''
+                    print template.format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
+                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3]),str(p_name))
 
             db_conn.commit()
 

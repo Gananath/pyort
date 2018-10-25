@@ -11,11 +11,14 @@ except:
 
 def get_process_name(pid):
     try:
-        p_name=psutil.Process(pid).name()
-        return p_name
-    except:
+        if pid==None:
+            return 'None'
+        else:
+            p_name=psutil.Process(pid).name()  
+            return p_name
+    except:        
         return 'None'
-        return 'None'
+        
 def project_honey_pot(ip,key):
     bl = httpbl.HttpBL(key)
     response = bl.query(ip)
@@ -45,7 +48,7 @@ def extract_ip(x,ip=True):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7"    
+    VERSION="0.1.7.2"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)

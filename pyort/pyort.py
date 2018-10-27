@@ -1,8 +1,8 @@
 import sys
 import argparse
-sys.path.append("../pyort/pyort/")
-from pyort_fun import *
-#from .pyort_fun import *
+#sys.path.append("../pyort/pyort/")
+#from pyort_fun import *
+from .pyort_fun import *
 
 
 
@@ -11,6 +11,7 @@ def main():
     #monitoring and logging
     parser.add_argument('-s','--start',action='store_true', help="Start monitoring of foregin IP's")
     parser.add_argument('-k','--kind',type=str,help="Similar to [kind] parameter in psutil.net_connections")
+    parser.add_argument('-Sv','--save',action='store_true',help="Saving output in database")
     parser.add_argument('-x','--silent',action='store_true',help="Silent mode, will not print any output")
     #for viewing database
     parser.add_argument('-d','--database',action='store_true',help="Fetch recent rows from database")
@@ -105,20 +106,20 @@ def pyort_start(args):
                     threat_score,last_active=project_honey_pot(remote_ip,hp_key)
                 else:
                     threat_score,last_active=None,None
-                    
-                if is_record_exists==False:                    
-                    sql_query="""INSERT INTO pyort(fd,family,
-                                       conn_type,local_ip,local_port,remote_ip,remote_port,
-                                       status,pid,process_name,today_count,threat_score,last_active)
-                                       VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+                if args.save==True:
+                    if is_record_exists==False:                    
+                        sql_query="""INSERT INTO pyort(fd,family,
+                                           conn_type,local_ip,local_port,remote_ip,remote_port,
+                                           status,pid,process_name,today_count,threat_score,last_active)
+                                           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
-                    db_conn.execute(sql_query,(fd, family_code, type_code,str(local_ip),str(local_port),\
-                                               str(remote_ip),str(remote_port),status_code,str(p_id),\
-                                                str(p_name),count,str(threat_score),str(last_active)))
-                else:            
-                    sql_query="""UPDATE pyort SET last_time=DATETIME('now'),
-                         today_count=today_count+1,threat_score=?,last_active=?,pid=?,process_name=? where remote_ip=?"""
-                    db_conn.execute(sql_query,(str(threat_score),str(last_active),str(p_id),str(p_name),remote_ip))
+                        db_conn.execute(sql_query,(fd, family_code, type_code,str(local_ip),str(local_port),\
+                                                   str(remote_ip),str(remote_port),status_code,str(p_id),\
+                                                    str(p_name),count,str(threat_score),str(last_active)))
+                    else:            
+                        sql_query="""UPDATE pyort SET last_time=DATETIME('now'),
+                             today_count=today_count+1,threat_score=?,last_active=?,pid=?,process_name=? where remote_ip=?"""
+                        db_conn.execute(sql_query,(str(threat_score),str(last_active),str(p_id),str(p_name),remote_ip))
                 if args.silent!=True: 
                     '''
                     if is_record_exists==False:

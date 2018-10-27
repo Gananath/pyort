@@ -13,6 +13,8 @@ Help: `pyort -h`
 
 Start: `pyort --start`
 
+Save: `pyort -s -Sv`
+
 Custom: `pyort -s --kind tcp6`
 
 Silent: `pyort -s -x`

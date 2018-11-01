@@ -31,8 +31,10 @@ db_path = database path
 db_name = database name
 interval = time interval for updating ip's
 kind = kind of connections all,tcp,udp etc
+geo_ip = for getting geo location info
 project_honey_pot_key = projecthoneypot.org's api key
 threat_update_count = interval for updating the threat score from projecthoneypot.org
+version = show the version number
 ```
 ## Optional
 

@@ -23,13 +23,17 @@ def main():
     args = parser.parse_args()
     sys.stdout.write(str(pyort_start(args)))
     
-def pyort_start(args):    
+def pyort_start(args):
+
+    #config file and location
     configfile_name = "config.ini"
-    directory=os.path.expanduser("~")+"/.config/pyort/" 
-    
+    directory=os.path.expanduser("~")+"/.config/pyort/"     
    
     #fetch values from config file
-    db_path,db_name,time_interval,kd,hp_key,threat_update,VERSION=config_para(directory,configfile_name)
+    db_path,db_name,time_interval,kd,hp_key,threat_update,VERSION,geo_ip=config_para(directory,configfile_name)
+
+   
+   
     
     if args.start == True or args.database == True:
         #connecting to database
@@ -73,12 +77,20 @@ def pyort_start(args):
            
          
     #starts monitioring
-    if args.start==True and args.database == False:        
+    if args.start==True and args.database == False:
+        
+         #GeoIP location data download from maxmind
+        if geo_ip !='' and geo_ip in ['True','true', 'Yes','yes','Y', 'y', '1']:
+            geolite2_download(directory)        
+        elif geo_ip !=''  and geo_ip not in ['True','true', 'Yes','yes','Y', 'y', '1']:
+            print("\n Warning: Please add Yes/Y/True to [geo_ip] in [config.ini] file to enble GeoIP")
+            print(" or \n To disable keept [geo_ip] empty \n")
+            
         print("\nMonitoring "+kd+" connections.\n")  
         #Loop till exit
         #Print format
-        template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<}"
-        print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process") 
+        template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<15}|{:<}"
+        print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process","Location") 
         while True:
             count=0
             conn=psutil.net_connections(kind=kd)
@@ -100,22 +112,31 @@ def pyort_start(args):
                            
                 #verfiy if the ip exists in the database
                 is_record_exists, t_count=record_exists(db_conn,remote_ip)
-                
+
+                #GeoIP location
+                if geo_ip !=''  and geo_ip in ['True','true', 'Yes','yes','Y', 'y', '1']:
+                    loc_name =geoip2_location(directory,remote_ip)       
+                   
+                else:
+                    loc_name=None
+                    
                 #updating project_honey_pot threat_score
-                if hp_key!='' and int(count)%int(threat_update)==0:
+                if hp_key!='' and int(count)%int(threat_update)==0 and args.save==True:
                     threat_score,last_active=project_honey_pot(remote_ip,hp_key)
                 else:
                     threat_score,last_active=None,None
-                if args.save==True:
+                
+                if args.save==True:                    
                     if is_record_exists==False:                    
                         sql_query="""INSERT INTO pyort(fd,family,
                                            conn_type,local_ip,local_port,remote_ip,remote_port,
-                                           status,pid,process_name,today_count,threat_score,last_active)
-                                           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+                                           status,pid,process_name,today_count,threat_score,last_active,location)
+                                           VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
 
                         db_conn.execute(sql_query,(fd, family_code, type_code,str(local_ip),str(local_port),\
                                                    str(remote_ip),str(remote_port),status_code,str(p_id),\
-                                                    str(p_name),count,str(threat_score),str(last_active)))
+                                                    str(p_name),count,str(threat_score),str(last_active),str(loc_name)))
+                       
                     else:            
                         sql_query="""UPDATE pyort SET last_time=DATETIME('now'),
                              today_count=today_count+1,threat_score=?,last_active=?,pid=?,process_name=? where remote_ip=?"""
@@ -130,7 +151,8 @@ def pyort_start(args):
                      str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))                 
                      '''
                     print template.format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
-                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3]),str(p_name))
+                                          str(remote_port),str(p_id),str(t_count[14]),str(t_count[13]),\
+                                          str(p_name),str(loc_name))
 
             db_conn.commit()
 
@@ -140,4 +162,10 @@ def pyort_start(args):
 
 if __name__=='__main__':     
     main()
+
+
+
+
+
+
 

@@ -40,7 +40,7 @@ threat_update_count = interval for updating the threat score from projecthoneypo
 If wanted you can also get [project honey pot's](https://www.projecthoneypot.org/) threat score for foreign ip's but needs project honey pot's api key and `pip install httpbl` then add api key to `config.ini` without quotes. This only works when `--save` option is enabled.
 
 ###### Maxmind's GeoIP
-If you needed the geo location of foreign ip's then in the `config.ini` file change `geo_ip =` to `geo_ip = True` also without quotes.
+If you needed the geo location of foreign ip's then in the `config.ini` file change `geo_ip =` to `geo_ip = True` without quotes.
 
 ## Notice
 If anything goes wrong afer updating to a newer version of pyort then try to delete the config and database files inside `$HOME/.config/pyort` and then reinstall the new version.

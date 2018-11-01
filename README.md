@@ -37,7 +37,7 @@ threat_update_count = interval for updating the threat score from projecthoneypo
 ## Optional
 
 ###### Project Honey pot
-If wanted you can also get [project honey pot's](https://www.projecthoneypot.org/) threat score for foreign ip's but needs project honey pot's api key and `pip install httpbl` then add api key to `config.ini` without quotes. This only works when `--save` option is enabled
+If wanted you can also get [project honey pot's](https://www.projecthoneypot.org/) threat score for foreign ip's but needs project honey pot's api key and `pip install httpbl` then add api key to `config.ini` without quotes. This only works when `--save` option is enabled.
 
 ###### Maxmind's GeoIP
 If you needed the geo location of foreign ip's then in the `config.ini` file change `geo_ip =` to `geo_ip = True` also without quotes.

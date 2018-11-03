@@ -45,4 +45,4 @@ If wanted you can also get [project honey pot's](https://www.projecthoneypot.org
 If you needed the geo location of foreign ip's then in the `config.ini` file change `geo_ip =` to `geo_ip = True` without quotes.
 
 ## Notice
-If anything goes wrong afer updating to a newer version of pyort then try to delete the config and database files inside `$HOME/.config/pyort` and then reinstall the new version.
+If anything goes wrong afer updating to a newer version of pyort then try to delete the config and database files inside `$HOME/.config/pyort/` and then reinstall the new version.

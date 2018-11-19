@@ -52,7 +52,7 @@ def pyort_start(args):
         print(VERSION)
         exit
     elif args.database == True and args.start == True:
-        print "Warning: -d and -s parameters are not allowed together."
+        print ("Warning: -d and -s parameters are not allowed together.")
         exit     
     elif args.database == True and args.start ==False:               
         if args.order==None:

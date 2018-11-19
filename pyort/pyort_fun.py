@@ -75,32 +75,32 @@ def geolite2_download(directory):
         if not os.path.isfile(geoip_path+"GeoLite2-City.mmdb"):
             if not os.path.exists(geoip_path):
                 os.makedirs(geoip_path)
-            print "Downloading GeoIP location file from maxmind.com"
-            print "Please wait."
+            print ("Downloading GeoIP location file from maxmind.com")
+            print ("Please wait.")
             urllib.urlretrieve(web,geoip_path+"GeoLite2-City.tar.gz")
-            print "Download complete"            
-            print "Extracting files from  GeoLite2-City.tar.gz"
+            print ("Download complete")            
+            print ("Extracting files from  GeoLite2-City.tar.gz")
             tar = tarfile.open(geoip_path+"GeoLite2-City.tar.gz", "r:gz")
             #tar.extractall(geoip_path=geoip_path)
             s= tar.getnames()
             s=[s for s in s if "GeoLite2-City.mmdb" in s]
             tar.extract(s[0],geoip_path)
             tar.close()
-            print "Moving files to Geolite2-City"
+            print ("Moving files to Geolite2-City")
             for i in os.listdir(geoip_path):    
                 if os.path.isdir(geoip_path+i):                    
                     os.rename(geoip_path+i+"/"+"GeoLite2-City.mmdb",\
                     geoip_path+"GeoLite2-City.mmdb")
-                    print "Removing tar file"
+                    print ("Removing tar file")
                     os.remove(geoip_path+"GeoLite2-City.tar.gz")
                     os.rmdir(geoip_path+i)
 
-            print "Download complete"
+            print ("Download complete")
         else:
-            print "GeoIP location loaded"
+            print ("GeoIP location loaded")
     except:
-        print "Error while downloading GeoIP location file from maxmind"
-        print "Please check your network connection"
+        print ("Error while downloading GeoIP location file from maxmind")
+        print ("Please check your network connection")
     
 
 
@@ -143,8 +143,8 @@ def config_para(directory,configfile_name):
         threat_update=Config.get('pyort', 'threat_update_count')
         version=Config.get('pyort', 'version')        
     except Exception as e:
-        print e.__doc__
-        print e.message
+        print (e.__doc__)
+        print (e.message)
         print("Got some error in [config.ini], Deleting old one and creating new [config.ini].")        
         os.remove(directory+configfile_name)
         config_para(directory,configfile_name)  
@@ -175,11 +175,11 @@ def sqlite_conn(db_path,db_name):
                          location TEXT NOT NULL   
                         
                          );''')
-        print "Database connected"
+        print ("Database connected")
         return db_conn
     except Error as e:
-        print e
-        print "Error"
+        print (e)
+        print ("Error")
         
     
 

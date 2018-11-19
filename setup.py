@@ -11,7 +11,7 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','pysqlite ;python_version<"3.0"','pysqlite3 ;python_version>"3.0"'],
     # *strongly* suggested for sharing
-    version='0.1.7.5',
+    version='0.1.7.5.1',
     
     entry_points = {
         'console_scripts': [

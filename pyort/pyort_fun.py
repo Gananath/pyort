@@ -2,11 +2,13 @@ import os
 import time
 import psutil
 import urllib
-import sqlite3
 import tarfile
 import ipaddress
 import ConfigParser
-
+try:
+    import sqlite3
+except:
+    pass
 try:
     import httpbl
 except:
@@ -103,7 +105,7 @@ def geolite2_download(directory):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.5"    
+    VERSION="0.1.7.5.1"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)

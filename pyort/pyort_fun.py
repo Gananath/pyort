@@ -185,8 +185,8 @@ def sqlite_conn(db_path,db_name):
 
 def print_database(records):
     template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<15}|{:<}"
-    print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat",\
-    "Count","Process","Location")  
+    print (template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat",\
+    "Count","Process","Location"))  
     for i in records:
         local_ip=i[6]
         local_port=i[7]
@@ -199,8 +199,8 @@ def print_database(records):
         print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
                 .format(str(i[2]),str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
                 str(i[-2]),str(i[-3])))'''
-        print template.format(str(i[2]),str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
-                str(i[-2]),str(i[-3]),str(p_name),str(loc_name))
+        print (template.format(str(i[2]),str(local_ip),str(local_port),str(remote_ip),str(remote_port),str(p_id),\
+                str(i[-2]),str(i[-3]),str(p_name),str(loc_name)))
     return None
 
 def record_exists(db_conn,ip=None,job=None, limit=1):

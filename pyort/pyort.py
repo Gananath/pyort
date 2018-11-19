@@ -90,7 +90,7 @@ def pyort_start(args):
         #Loop till exit
         #Print format
         template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<15}|{:<}"
-        print template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process","Location") 
+        print (template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process","Location"))
         while True:
             count=0
             conn=psutil.net_connections(kind=kd)
@@ -150,9 +150,9 @@ def pyort_start(args):
                     .format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
                      str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))                 
                      '''
-                    print template.format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
+                    print (template.format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
                                           str(remote_port),str(p_id),str(t_count[14]),str(t_count[13]),\
-                                          str(p_name),str(loc_name))
+                                          str(p_name),str(loc_name)))
 
             db_conn.commit()
 

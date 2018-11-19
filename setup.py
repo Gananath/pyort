@@ -9,9 +9,9 @@ setup(
     # Needed to actually package something
     packages=['pyort'],
     # Needed for dependencies
-    install_requires=['psutil','argparse'],
+    install_requires=['psutil','argparse','configparser'],
     # *strongly* suggested for sharing
-    version='0.1.7.5.2',
+    version='0.1.7.5.3',
     
     entry_points = {
         'console_scripts': [

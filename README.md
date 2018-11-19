@@ -17,7 +17,7 @@ Save: `pyort -s -Sv` (need to install sqlite manually)
 
 Custom: `pyort -s --kind tcp6`
 
-Silent: `pyort -s -x`
+Silent: `pyort -s -Sv -x`
 
 ###### Database viewing 
 Incidence = `pyort -d -l 100`

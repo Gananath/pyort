@@ -9,9 +9,9 @@ setup(
     # Needed to actually package something
     packages=['pyort'],
     # Needed for dependencies
-    install_requires=['psutil','argparse','pysqlite'],
+    install_requires=['psutil','argparse','pysqlite ;python_version<"3.0"','pysqlite3 ;python_version>"3.0"'],
     # *strongly* suggested for sharing
-    version='0.1.7.4',
+    version='0.1.7.5',
     
     entry_points = {
         'console_scripts': [

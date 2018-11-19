@@ -4,7 +4,7 @@ import psutil
 import urllib
 import tarfile
 import ipaddress
-import ConfigParser
+import configparser
 try:
     import sqlite3
 except:
@@ -105,13 +105,13 @@ def geolite2_download(directory):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.5.2"    
+    VERSION="0.1.7.5.3"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)
     
     # Check if there is already a configurtion file
-    Config = ConfigParser.ConfigParser()
+    Config = configparser.ConfigParser()
     if not os.path.isfile(directory+configfile_name):
         # Create the configuration file as it doesn't exist yet
         cfgfile = open(directory+configfile_name, 'w')

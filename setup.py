@@ -1,5 +1,9 @@
+import os
 from setuptools import setup
 
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
     name='pyort',
@@ -9,10 +13,11 @@ setup(
     # Needed to actually package something
     packages=['pyort'],
     # Needed for dependencies
-    install_requires=['psutil','argparse','configparser'],
+    install_requires=['psutil','argparse','configparser','ipaddress'],
     # *strongly* suggested for sharing
-    version='0.1.7.5.3',
-    
+    version='0.1.7.5.7',
+    # Long description
+    #long_description=read('README.md'),
     entry_points = {
         'console_scripts': [
             'pyort=pyort.pyort:main',

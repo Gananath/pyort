@@ -7,7 +7,7 @@ def read(fname):
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
     name='pyort',
-    url='https://github.com/Gananath/Pyort',
+    url='https://github.com/Gananath/pyort',
     author='Gananath R',
     author_email='nomail@nomail.com',
     # Needed to actually package something
@@ -15,7 +15,7 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','configparser','ipaddress'],
     # *strongly* suggested for sharing
-    version='0.1.7.5.7',
+    version='0.1.7.5.8',
     # Long description
     #long_description=read('README.md'),
     entry_points = {

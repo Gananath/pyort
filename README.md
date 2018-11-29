@@ -44,7 +44,7 @@ version = show the version number
 +--------+-------------+-------------------------------------------------------------------+
 | Code   |     Name    |                           Description                             |
 +--------+-------------+-------------------------------------------------------------------+
-| r      |   Recent    | Will show that date if database enabled                           |
+| r      |   Recent    | Will show the date if database enabled                            |
 | l      |   Local     | Local IP                                                          |
 | p      |   L Port    | Port used by the local IP                                         |
 | f      |   Foregin   | Remote IP                                                         |

@@ -2,12 +2,12 @@
 Command line tool for monitoring and logging all foreign network connections. Best way to use this tool is along with other network monitoring tools such as `iftop`
 
 ## Installation (python 2.7)
-`python2.7 -m pip install pyort`
-   or
 `pip install pyort` 
    or 
 `pip install git+https://github.com/Gananath/pyort.git`
-
+   or
+`python2.7 -m pip install pyort`
+ 
 ## Usage
 
 ###### Monitoring and Logging

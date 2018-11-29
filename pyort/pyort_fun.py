@@ -54,6 +54,70 @@ def extract_ip(x,ip=True):
     except:        
         return None
 
+def print_table(table_format):
+    table_list=[x.strip() for x in table_format.split(',')]
+    template_column=[]
+    template_value=""
+    template_print_value=[]
+    for i in table_list:
+        if i =="r":
+            template_column.append("Recent")
+            template_value+="| {:<20}"
+            template_print_value.append("str(t_count[2])")
+        elif i == "l":
+            template_column.append("Local")
+            template_value+="| {:>15}"
+            template_print_value.append("str(local_ip)")
+        elif i == "lp":
+            template_column.append("L Port")
+            template_value+="| {:>7}"
+            template_print_value.append("str(local_port)")    
+        elif i == "f":
+            template_column.append("Foreign")
+            template_value+="| {:>15}"
+            template_print_value.append("str(remote_ip)")
+        elif i == "fp":
+            template_column.append("F Port")
+            template_value+="| {:>7}" 
+            template_print_value.append("str(remote_port)")
+        elif i == "pid":
+            template_column.append("PID")
+            template_value+="| {:<6}"
+            template_print_value.append("str(p_id)")
+        elif i == "t":
+            template_column.append("Threat")
+            template_value+="| {:<6}"
+            template_print_value.append("str(t_count[14])")
+        elif i == "c":
+            template_column.append("Count")
+            template_value+="| {:<7}"
+            template_print_value.append("str(t_count[13])")
+        elif i == "p":
+            template_column.append("Process")
+            template_value+="| {:<15}"
+            template_print_value.append("str(p_name)")
+        elif i == "loc":
+            template_column.append("Location")
+            template_value+="| {:<}"
+            template_print_value.append("str(loc_name)")
+        elif i == "fd":
+            template_column.append("File Desc")
+            template_value+="| {:<5}"
+            template_print_value.append("str(fd)")
+        elif i == "fam":
+            template_column.append("Family")
+            template_value+="| {:<9}"
+            template_print_value.append("str(family_code)")
+        elif i == "typ":
+            template_column.append("Type")
+            template_value+="| {:<9}"
+            template_print_value.append("str(type_code)")
+        elif i == "sc":
+            template_column.append("Status")
+            template_value+="| {:<15}"
+            template_print_value.append("str(status_code)")
+    template_print_value=", ".join(template_print_value)
+    return template_column,template_value,template_print_value
 
 def geoip2_location(directory,ip):
     try:
@@ -105,7 +169,7 @@ def geolite2_download(directory):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.5.7"    
+    VERSION="0.1.7.5.8"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -125,6 +189,7 @@ def config_para(directory,configfile_name):
         Config.set('pyort', 'geo_ip','')
         Config.set('pyort', 'project_honey_pot_key','')
         Config.set('pyort', 'threat_update_count','1000')
+        Config.set('pyort','table_format','r,l,lp, f, fp, pid,t,c,p,loc')
         Config.set('pyort', 'version',VERSION)
         Config.write(cfgfile)
         cfgfile.close()
@@ -141,6 +206,7 @@ def config_para(directory,configfile_name):
         geo_ip=Config.get('pyort', 'geo_ip')
         hp_key=Config.get('pyort', 'project_honey_pot_key')
         threat_update=Config.get('pyort', 'threat_update_count')
+        table_format=Config.get('pyort', 'table_format')
         version=Config.get('pyort', 'version')        
     except Exception as e:
         print (e.__doc__)
@@ -149,7 +215,7 @@ def config_para(directory,configfile_name):
         os.remove(directory+configfile_name)
         config_para(directory,configfile_name)  
     
-    return db_path,db_name,slp,kd,hp_key,threat_update,version,geo_ip
+    return db_path,db_name,slp,kd,hp_key,threat_update,version,geo_ip,table_format
     
 
 def sqlite_conn(db_path,db_name):

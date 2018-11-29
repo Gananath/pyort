@@ -30,7 +30,7 @@ def pyort_start(args):
     directory=os.path.expanduser("~")+"/.config/pyort/"     
    
     #fetch values from config file
-    db_path,db_name,time_interval,kd,hp_key,threat_update,VERSION,geo_ip=config_para(directory,configfile_name)
+    db_path,db_name,time_interval,kd,hp_key,threat_update,VERSION,geo_ip,table_format=config_para(directory,configfile_name)
 
    
    
@@ -88,9 +88,9 @@ def pyort_start(args):
             
         print("\nMonitoring "+kd+" connections.\n")  
         #Loop till exit
-        #Print format
-        template="{:<20}| {:>15}|{:>6} |{:>15}|{:>6} | {:<6} |{:<6} |{:<7}|{:<15}|{:<}"
-        print (template.format("Recent"," Local","Port", "Foreign", "Port", "PID","Threat","Count","Process","Location"))
+        #Print format        
+        template_column,template,template_print_value=print_table(table_format)
+        print (template.format(*template_column)) #print column names
         while True:
             count=0
             conn=psutil.net_connections(kind=kd)
@@ -148,12 +148,11 @@ def pyort_start(args):
                         tcount=[0]*10                 
                     print("Recent= {:<20} Local= {:>15}:{:<6} Foreign= {:>15}:{:<6} PID= {:<6} Threat= {:<4} Count= {:<4} "\
                     .format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
-                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))                 
-                     '''
-                    print (template.format(str(t_count[2]),str(local_ip),str(local_port),str(remote_ip),\
-                                          str(remote_port),str(p_id),str(t_count[14]),str(t_count[13]),\
-                                          str(p_name),str(loc_name)))
-
+                     str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))             
+                     
+                   '''
+                   #print table values
+                    print(template.format(*eval(template_print_value)))
             db_conn.commit()
 
             time.sleep(float(time_interval))

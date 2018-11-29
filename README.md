@@ -2,6 +2,8 @@
 Command line tool for monitoring and logging all foreign network connections. Best way to use this tool is along with other network monitoring tools such as `iftop`
 
 ## Installation (python 2.7)
+`python2.7 -m pip install pyort`
+   or
 `pip install pyort` 
    or 
 `pip install git+https://github.com/Gananath/pyort.git`
@@ -34,7 +36,29 @@ kind = kind of connections all,tcp,udp etc
 geo_ip = for getting geo location info
 project_honey_pot_key = projecthoneypot.org's api key
 threat_update_count = interval for updating the threat score from projecthoneypot.org
+table_format = organize the output table
 version = show the version number
+```
+###### table_format
+```
++--------+-------------+-------------------------------------------------------------------+
+| Code   |     Name    |                           Description                             |
++--------+-------------+-------------------------------------------------------------------+
+| r      |   Recent    | Will show that date if database enabled                           |
+| l      |   Local     | Local IP                                                          |
+| p      |   L Port    | Port used by the local IP                                         |
+| f      |   Foregin   | Remote IP                                                         |
+| fp     |   F Port    | Port used by the remote IP                                        |
+| pid    |   PID       | Process ID associated with the connections                        |
+| t      |   Threat    | Project honey pot's threat score                                  |
+| c      |   Count     | Number of times remote ip tried to connect (only with db enabled) |
+| p      |   Process   | Process associated with the connections                           |
+| loc    |   Location  | Geo location of the remote ip (need Maxmind's GeoIP)              |
+| fd     |   File Desc | File Descriptor (refer psutil documentation)                      |
+| fam    |   Family    | Address family (refer psutil documentation)                       |
+| typ    |   Type      | Address Type (refer psutil documentation)                         |
+| sc     |   Status    | Connection establishment status                                   |
++--------+-------------+-------------------------------------------------------------------+
 ```
 ## Optional
 
@@ -48,4 +72,4 @@ If wanted you can also get [project honey pot's](https://www.projecthoneypot.org
 If you needed the geo location of foreign ip's then in the `config.ini` file change `geo_ip =` to `geo_ip = True` without quotes.
 
 ## Notice
-If anything goes wrong afer updating to a newer version of pyort then try to delete the config and database files inside `$HOME/.config/pyort/` and then reinstall the new version.
+If anything goes wrong to pyort afer updating to a newer version of pyort then try to delete the config and database files inside `$HOME/.config/pyort/` and then reinstall the new version.

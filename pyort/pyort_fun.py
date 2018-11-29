@@ -106,15 +106,15 @@ def print_table(table_format):
             template_print_value.append("str(fd)")
         elif i == "fam":
             template_column.append("Family")
-            template_value+="| {:<9}"
+            template_value+="| {:<6}"
             template_print_value.append("str(family_code)")
         elif i == "typ":
             template_column.append("Type")
-            template_value+="| {:<9}"
+            template_value+="| {:<5}"
             template_print_value.append("str(type_code)")
         elif i == "sc":
             template_column.append("Status")
-            template_value+="| {:<15}"
+            template_value+="| {:<12}"
             template_print_value.append("str(status_code)")
     template_print_value=", ".join(template_print_value)
     return template_column,template_value,template_print_value

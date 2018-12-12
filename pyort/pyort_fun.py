@@ -184,7 +184,7 @@ def config_para(directory,configfile_name):
         Config.add_section('pyort')
         Config.set('pyort', 'db_path', directory)
         Config.set('pyort', 'db_name','pyort.db')
-        Config.set('pyort', 'interval','10')
+        Config.set('pyort', 'interval','2')
         Config.set('pyort', 'kind',"all")
         Config.set('pyort', 'geo_ip','')
         Config.set('pyort', 'project_honey_pot_key','')

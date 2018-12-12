@@ -9,13 +9,13 @@ setup(
     name='pyort',
     url='https://github.com/Gananath/pyort',
     author='Gananath R',
-    author_email='nomail@nomail.com',
+    author_email='no-mail@no-mail.com',
     # Needed to actually package something
     packages=['pyort'],
     # Needed for dependencies
-    install_requires=['psutil','argparse','configparser','ipaddress'],
+    install_requires=['psutil','argparse','configparser','ipaddress','pysqlite'],
     # *strongly* suggested for sharing
-    version='0.1.7.5.8',
+    version='0.1.7.5.9',
     # Long description
     #long_description=read('README.md'),
     entry_points = {

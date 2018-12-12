@@ -189,7 +189,7 @@ def config_para(directory,configfile_name):
         Config.set('pyort', 'geo_ip','')
         Config.set('pyort', 'project_honey_pot_key','')
         Config.set('pyort', 'threat_update_count','1000')
-        Config.set('pyort','table_format','r,l,lp, f, fp, pid,t,c,p,loc')
+        Config.set('pyort','table_format','f,fp,lp,sc,pid,fam,typ,p,loc')
         Config.set('pyort', 'version',VERSION)
         Config.write(cfgfile)
         cfgfile.close()

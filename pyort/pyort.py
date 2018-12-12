@@ -1,3 +1,9 @@
+"""
+pyort: Command line tool for monitoring and logging all foreign network connections. 
+Author: Gananath R
+Link: https://github.com/Gananath/pyort
+"""
+
 import sys
 import argparse
 #sys.path.append("../pyort/pyort/")

@@ -102,7 +102,7 @@ def print_table(table_format):
             template_print_value.append("str(loc_name)")
         elif i == "fd":
             template_column.append("File Desc")
-            template_value+="| {:<5}"
+            template_value+="| {:<9}"
             template_print_value.append("str(fd)")
         elif i == "fam":
             template_column.append("Family")
@@ -169,7 +169,7 @@ def geolite2_download(directory):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.5.8"    
+    VERSION="0.1.7.5.9"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)

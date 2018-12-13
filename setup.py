@@ -13,9 +13,9 @@ setup(
     # Needed to actually package something
     packages=['pyort'],
     # Needed for dependencies
-    install_requires=['psutil','argparse','configparser','ipaddress','pysqlite'],
+    install_requires=['psutil','argparse','configparser','ipaddress'],
     # *strongly* suggested for sharing
-    version='0.1.7.5.9',
+    version='0.1.7.5.91',
     # Long description
     #long_description=read('README.md'),
     entry_points = {

@@ -15,7 +15,7 @@ Help: `pyort -h`
 
 Start: `pyort --start`
 
-Save: `pyort -s -Sv` 
+Save: `pyort -s -Sv` (need to install sqlite manually)
 
 Custom: `pyort -s --kind tcp6`
 
@@ -61,6 +61,9 @@ version = show the version number
 +--------+-------------+-------------------------------------------------------------------+
 ```
 ## Optional
+
+###### Database
+You can save the logs in a sqlite database and the `--save` option only works with sqlite installed. You can install sqlite by `pip install pysqlite` for pyhton 2.7.
 
 ###### Project Honey pot
 If wanted you can also get [project honey pot's](https://www.projecthoneypot.org/) threat score for foreign ip's but needs project honey pot's api key and `pip install httpbl` then add api key to `config.ini` without quotes. This only works when `--save` option is enabled.

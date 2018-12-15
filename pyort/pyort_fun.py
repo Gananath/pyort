@@ -184,7 +184,7 @@ def config_para(directory,configfile_name):
 
         # Add content to the file       
         #Config.add_section('pyort')
-        Config['pyort'] = {'db_path': directory,'db_name':'pyort.db','interval':'2','kind':"all",'geo_ip':'','project_honey_pot_key':'','threat_update_count':'1000', 'table_format':'f,fp,lp,sc,pid,fam,typ,p,loc','version':VERSION}
+        Config['pyort'] = {'db_path': directory,'db_name':'pyort.db','interval':'2','kind':"all",'geo_ip':'','project_honey_pot_key':'','threat_update_count':'1000', 'table_format':'f,fp,lp,sc,pid,fam,p,loc','version':VERSION}
         Config.write(cfgfile)
         cfgfile.close()
 

@@ -106,11 +106,11 @@ def print_table(table_format):
             template_print_value.append("str(fd)")
         elif i == "fam":
             template_column.append("Family")
-            template_value+="| {:<6}"
+            template_value+="| {:<25}"
             template_print_value.append("str(family_code)")
         elif i == "typ":
             template_column.append("Type")
-            template_value+="| {:<5}"
+            template_value+="| {:<25}"
             template_print_value.append("str(type_code)")
         elif i == "sc":
             template_column.append("Status")
@@ -168,37 +168,33 @@ def geolite2_download(directory):
     
 
 
+
+
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.5.91"    
+    VERSION="0.1.7.6"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)
-    
+
     # Check if there is already a configurtion file
     Config = configparser.ConfigParser()
     if not os.path.isfile(directory+configfile_name):
-        # Create the configuration file as it doesn't exist yet
+    # Create the configuration file as it doesn't exist yet
         cfgfile = open(directory+configfile_name, 'w')
-        
+
         # Add content to the file       
-        Config.add_section('pyort')
-        Config.set('pyort', 'db_path', directory)
-        Config.set('pyort', 'db_name','pyort.db')
-        Config.set('pyort', 'interval','2')
-        Config.set('pyort', 'kind',"all")
-        Config.set('pyort', 'geo_ip','')
-        Config.set('pyort', 'project_honey_pot_key','')
-        Config.set('pyort', 'threat_update_count','1000')
-        Config.set('pyort','table_format','f,fp,lp,sc,pid,fam,typ,p,loc')
-        Config.set('pyort', 'version',VERSION)
+        #Config.add_section('pyort')
+        Config['pyort'] = {'db_path': directory,'db_name':'pyort.db','interval':'2','kind':"all",'geo_ip':'','project_honey_pot_key':'','threat_update_count':'1000', 'table_format':'f,fp,lp,sc,pid,fam,typ,p,loc','version':VERSION}
         Config.write(cfgfile)
         cfgfile.close()
-  
+
+
     try:
         Config.read(directory+configfile_name)
-        Config.set('pyort', 'version',VERSION)
-        with open(directory+configfile_name, 'wb') as configfile:
+        Config['pyort']['version'] = VERSION
+        with open(directory+configfile_name, 'w') as configfile:
             Config.write(configfile)
+            
         db_path= Config.get('pyort','db_path')
         db_name= Config.get('pyort','db_name')
         slp= Config.get('pyort','interval')
@@ -207,14 +203,12 @@ def config_para(directory,configfile_name):
         hp_key=Config.get('pyort', 'project_honey_pot_key')
         threat_update=Config.get('pyort', 'threat_update_count')
         table_format=Config.get('pyort', 'table_format')
-        version=Config.get('pyort', 'version')        
+        version=Config.get('pyort', 'version') 
     except Exception as e:
-        print (e.__doc__)
-        print (e.message)
+        print (e)
         print("Got some error in [config.ini], Deleting old one and creating new [config.ini].")        
         os.remove(directory+configfile_name)
         config_para(directory,configfile_name)  
-    
     return db_path,db_name,slp,kd,hp_key,threat_update,version,geo_ip,table_format
     
 

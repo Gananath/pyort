@@ -10,7 +10,8 @@ import argparse
 #from pyort_fun import *
 from .pyort_fun import *
 
-
+if sys.version_info[0] >= 3:
+    unicode = str
 
 def main():
     parser = argparse.ArgumentParser()

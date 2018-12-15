@@ -15,7 +15,7 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','configparser','ipaddress'],
     # *strongly* suggested for sharing
-    version='0.1.7.5.91',
+    version='0.1.7.6',
     # Long description
     #long_description=read('README.md'),
     entry_points = {

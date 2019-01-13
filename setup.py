@@ -17,7 +17,7 @@ setup(
     # *strongly* suggested for sharing
     version='0.1.7.6.1',
     # Long description
-    #long_description=open("README.rst").read(),
+    long_description=open("README.rst").read(),
     entry_points = {
         'console_scripts': [
             'pyort=pyort.pyort:main',

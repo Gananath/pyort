@@ -15,9 +15,9 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','configparser','ipaddress'],
     # *strongly* suggested for sharing
-    version='0.1.7.6',
+    version='0.1.7.6.1',
     # Long description
-    #long_description=read('README.md'),
+    long_description=open("README.rst").read(),
     entry_points = {
         'console_scripts': [
             'pyort=pyort.pyort:main',

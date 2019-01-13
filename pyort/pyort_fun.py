@@ -171,7 +171,7 @@ def geolite2_download(directory):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.6"    
+    VERSION="0.1.7.6.1"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)

@@ -15,7 +15,7 @@ setup(
     # Needed for dependencies
     install_requires=['psutil','argparse','configparser','ipaddress'],
     # *strongly* suggested for sharing
-    version='0.1.7.6.1',
+    version='0.1.8',
     # Long description
     long_description=open("README.rst").read(),
     entry_points = {

@@ -59,6 +59,7 @@ version = show the version number
 | fam    |   Family    | Address family (refer psutil documentation)                       |
 | typ    |   Type      | Address Type (refer psutil documentation)                         |
 | sc     |   Status    | Connection establishment status                                   |
+| do     |   Domain    | Gets Domain name if PTR exists                                    |
 +--------+-------------+-------------------------------------------------------------------+
 ```
 ## Optional

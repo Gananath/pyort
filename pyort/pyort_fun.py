@@ -1,6 +1,7 @@
 import os
 import time
 import psutil
+import socket
 import urllib
 import tarfile
 import ipaddress
@@ -28,7 +29,11 @@ def get_process_name(pid):
             return p_name
     except:        
         return 'None'
-        
+def domain_lookup(ip):
+    try:
+        return socket.gethostbyaddr(ip)[0]
+    except:
+        pass
 def project_honey_pot(ip,key):
     bl = httpbl.HttpBL(key)
     response = bl.query(ip)
@@ -96,9 +101,13 @@ def print_table(table_format):
             template_column.append("Process")
             template_value+="| {:<15}"
             template_print_value.append("str(p_name)")
+        elif i == "do":
+            template_column.append("Domain")
+            template_value+="| {:<}"
+            template_print_value.append("str(d_name)")
         elif i == "loc":
             template_column.append("Location")
-            template_value+="| {:<}"
+            template_value+="| {:<25}"
             template_print_value.append("str(loc_name)")
         elif i == "fd":
             template_column.append("File Desc")
@@ -145,7 +154,7 @@ def geolite2_download(directory):
             print ("Download complete")            
             print ("Extracting files from  GeoLite2-City.tar.gz")
             tar = tarfile.open(geoip_path+"GeoLite2-City.tar.gz", "r:gz")
-            #tar.extractall(geoip_path=geoip_path)
+            # tar.extractall(geoip_path=geoip_path)
             s= tar.getnames()
             s=[s for s in s if "GeoLite2-City.mmdb" in s]
             tar.extract(s[0],geoip_path)
@@ -171,7 +180,7 @@ def geolite2_download(directory):
 
 
 def config_para(directory,configfile_name):
-    VERSION="0.1.7.6.1"    
+    VERSION="0.1.8"    
     # Check if there a directory exists or not
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -183,8 +192,8 @@ def config_para(directory,configfile_name):
         cfgfile = open(directory+configfile_name, 'w')
 
         # Add content to the file       
-        #Config.add_section('pyort')
-        Config['pyort'] = {'db_path': directory,'db_name':'pyort.db','interval':'2','kind':"all",'geo_ip':'','project_honey_pot_key':'','threat_update_count':'1000', 'table_format':'f,fp,lp,sc,pid,fam,p,loc','version':VERSION}
+        # Config.add_section('pyort')
+        Config['pyort'] = {'db_path': directory,'db_name':'pyort.db','interval':'2','kind':"all",'geo_ip':'','project_honey_pot_key':'','threat_update_count':'1000', 'table_format':'l,f,fp,lp,sc,pid,fam,p,loc,do','version':VERSION}
         Config.write(cfgfile)
         cfgfile.close()
 
@@ -269,7 +278,7 @@ def record_exists(db_conn,ip=None,job=None, limit=1):
         cursor=db_conn.execute(sql_query,(ip,limit))
         exist=cursor.fetchone()
         if exist is None:            
-            return False, [0]*30 #return a zero array
+            return False, [0]*30 # return a zero array
         else:            
             return True, exist
     elif job !=None:
@@ -281,8 +290,8 @@ def record_exists(db_conn,ip=None,job=None, limit=1):
             cursor=db_conn.execute(sql_query,(ip,limit))
         exist=cursor.fetchall()
         if exist is None:            
-            return False,[0]*30 #return a zero array
+            return False,[0]*30 # return a zero array
         else:            
             return True, exist
     else:
-        False, [0]*30 #return a zero array   
+        False, [0]*30 # return a zero array   

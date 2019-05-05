@@ -6,56 +6,57 @@ Link: https://github.com/Gananath/pyort
 
 import sys
 import argparse
-#sys.path.append("../pyort/pyort/")
-#from pyort_fun import *
+# sys.path.append("../pyort/pyort/")
+# from pyort_fun import *
 from .pyort_fun import *
 
+# python 2 and python 3 
 if sys.version_info[0] >= 3:
     unicode = str
 
 def main():
     parser = argparse.ArgumentParser()
-    #monitoring and logging
+    # monitoring and logging
     parser.add_argument('-s','--start',action='store_true', help="Start monitoring of foregin IP's")
     parser.add_argument('-k','--kind',type=str,help="Similar to [kind] parameter in psutil.net_connections")
     parser.add_argument('-Sv','--save',action='store_true',help="Saving output in database")
     parser.add_argument('-x','--silent',action='store_true',help="Silent mode, will not print any output")
-    #for viewing database
+    # for viewing database
     parser.add_argument('-d','--database',action='store_true',help="Fetch recent rows from database")
     parser.add_argument('-o','--order',nargs='?',type=str,default='count',help="Fetch by [ip] or [count]")
     parser.add_argument('-c','--constant',type=str,help="Add ip details here")
     parser.add_argument('-l','--limit',nargs='?',type=int,default=10,help="Fetch rows from database")
-    #version
+    # version
     parser.add_argument('-v','--version',action='store_true',help="Print program version and exit")
     args = parser.parse_args()
     sys.stdout.write(str(pyort_start(args)))
     
 def pyort_start(args):
 
-    #config file and location
+    # config file and location
     configfile_name = "config.ini"
     directory=os.path.expanduser("~")+"/.config/pyort/"     
    
-    #fetch values from config file
+    # fetch values from config file
     db_path,db_name,time_interval,kd,hp_key,threat_update,VERSION,geo_ip,table_format=config_para(directory,configfile_name)
 
    
    
     
     if args.start == True or args.database == True:
-        #connecting to database
+        # connecting to database
         db_conn=sqlite_conn(db_path,db_name)
         
     if args.kind != None: 
-        #kind argument from command line. uses the same parameter in psutil.net_connections
+        # kind argument from command line. uses the same parameter in psutil.net_connections
         kd=args.kind
     
-    #validating input values and fetches rows from database
+    # validating input values and fetches rows from database
     if args.database == False and args.start ==False and args.version==False:
         print ("Warning: please specify -d or -s or -v.") 
         exit
     elif args.version == True and args.database == False and args.start == False:
-        #print version and exit
+        # print version and exit
         print(VERSION)
         exit
     elif args.database == True and args.start == True:
@@ -63,10 +64,10 @@ def pyort_start(args):
         exit     
     elif args.database == True and args.start ==False:               
         if args.order==None:
-            #default order is count
+            # default order is count
             args.order="count"
         if args.limit ==None:
-            #default limit is 10
+            # default limit is 10
             limit=10
         else:
             limit=args.limit
@@ -83,10 +84,10 @@ def pyort_start(args):
             print_database(records)
            
          
-    #starts monitioring
+    # starts monitioring
     if args.start==True and args.database == False:
         
-         #GeoIP location data download from maxmind
+         # GeoIP location data download from maxmind
         if geo_ip !='' and geo_ip in ['True','true', 'Yes','yes','Y', 'y', '1']:
             geolite2_download(directory)        
         elif geo_ip !=''  and geo_ip not in ['True','true', 'Yes','yes','Y', 'y', '1']:
@@ -94,10 +95,10 @@ def pyort_start(args):
             print(" or \n To disable keept [geo_ip] empty \n")
             
         print("\nMonitoring "+kd+" connections.\n")  
-        #Loop till exit
-        #Print format        
+        # Loop till exit
+        # Print format
         template_column,template,template_print_value=print_table(table_format)
-        print (template.format(*template_column)) #print column names
+        print (template.format(*template_column)) # print column names
         while True:
             count=0
             conn=psutil.net_connections(kind=kd)
@@ -111,23 +112,26 @@ def pyort_start(args):
                 remote_ip=extract_ip(c[4])
                 remote_port=extract_ip(c[4],False)
                 status_code=c[5]
-                p_id=c[6]  
-                p_name= get_process_name(p_id)            
-                #if not an ip or a private ip then escape the loop
+                p_id=c[6]
+                if "Process" in template_column:
+                    p_name= get_process_name(p_id)
+                # if not an ip or a private ip then escape the loop
                 if remote_ip==None or ipaddress.ip_address(unicode(remote_ip)).is_private==True:
                     continue
                            
-                #verfiy if the ip exists in the database
+                # verfiy if the ip exists in the database
                 is_record_exists, t_count=record_exists(db_conn,remote_ip)
 
-                #GeoIP location
-                if geo_ip !=''  and geo_ip in ['True','true', 'Yes','yes','Y', 'y', '1']:
+                # GeoIP location
+                if geo_ip !=''  and geo_ip in ['True','true', 'Yes','yes','Y', 'y', '1'] and 'Location' in template_column:
                     loc_name =geoip2_location(directory,remote_ip)       
                    
                 else:
                     loc_name=None
-                    
-                #updating project_honey_pot threat_score
+                # Domain name lookup
+                if 'Domain' in template_column:
+                    d_name=domain_lookup(str(remote_ip))
+                # updating project_honey_pot threat_score
                 if hp_key!='' and int(count)%int(threat_update)==0 and args.save==True:
                     threat_score,last_active=project_honey_pot(remote_ip,hp_key)
                 else:
@@ -158,7 +162,7 @@ def pyort_start(args):
                      str(remote_port),str(p_id),str(t_count[-2]),str(t_count[-3])))             
                      
                    '''
-                   #print table values
+                   # print table values
                     print(template.format(*eval(template_print_value)))
             db_conn.commit()
 

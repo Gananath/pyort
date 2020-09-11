@@ -1,5 +1,5 @@
 # pyort
-Command line tool for monitoring and logging all foreign network connections. Best way to use this tool is along with other network monitoring tools such as `iftop`
+Command line tool for monitoring and logging all foreign network connections(ipv4). Best way to use this tool is along with other network monitoring tools such as `iftop`
 
 ## Installation (python 2.7 or above)
 `pip install pyort` 
